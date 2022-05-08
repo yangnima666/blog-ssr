@@ -1,0 +1,9 @@
+export const ironOptions = {
+  cookieName: process.env.SESSION_COOKIT_NAME as string,
+  password: process.env.SESSION_PASSWORDE as string,
+
+  cookieOptions: {
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: 24 * 60 * 60 * 1000,
+  },
+};
