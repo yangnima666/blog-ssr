@@ -30,7 +30,7 @@ async function sendVerifyCode(req: NextApiRequest, res: NextApiResponse) {
     url,
     {
       to,
-      AppId,
+      appId:AppId,
       templateId,
       datas: [verifyCode, expireMinute],
     },
@@ -61,7 +61,11 @@ async function sendVerifyCode(req: NextApiRequest, res: NextApiResponse) {
       
     });
   }
-  
+  // res.status(200).json({
+  //       code: statusCode,
+  //       msg:statusMsg,
+        
+  //     });
 }
 
 // export default sendVerifyCode;

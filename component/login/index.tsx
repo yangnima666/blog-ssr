@@ -37,6 +37,17 @@ const Login: NextPage<IProps> = ({ isShow = false, onClose }) => {
   };
   const handleLogin = () => {
     //登录按钮
+    request.post('api/user/login',{
+      ...form
+    }).then((res:any)=> {
+      if(res?.code === 0){
+        //登录成功
+        onClose()//关闭弹窗
+      }else {
+        message.error(res?.msg || '位置错误')
+      }
+      
+    })
   };
   const handleOtherLogin = () => {
     //其他登录方式
