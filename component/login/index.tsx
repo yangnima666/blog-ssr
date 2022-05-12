@@ -2,8 +2,8 @@ import CountDown from 'component/conutDown';
 import type { NextPage } from 'next';
 import { useState } from 'react';
 import style from './Login.module.scss';
-import { message } from 'antd'
-import request from 'service/fetch'
+import { message } from 'antd';
+import request from 'service/fetch';
 
 interface IProps {
   isShow: boolean;
@@ -18,63 +18,67 @@ const Login: NextPage<IProps> = ({ isShow = false, onClose }) => {
 
   const handleGetverityCode = () => {
     //获取验证码
-    if(!form.phone) {
-      message.error('请输入手机号')
-      return
+    if (!form.phone) {
+      message.error('请输入手机号');
+      return;
     }
-    request.post('/api/user/sendVerifyCode',{
-      to:form?.phone,
-      templateId:1
-    }).then((res:any)=> {
-      if(res?.code === 0){
-        setIsShowVerityCode(true)
-      }else {
-        message.error(res?.msg || '未知错误')
-      }
-      console.log(res)
-        
-    })
+    request
+      .post('/api/user/sendVerifyCode', {
+        to: form?.phone,
+        templateId: 1,
+      })
+      .then((res: any) => {
+        if (res?.code === 0) {
+          setIsShowVerityCode(true);
+        } else {
+          message.error(res?.msg || '未知错误');
+        }
+        console.log(res);
+      });
   };
   const handleLogin = () => {
     //登录按钮
-    request.post('api/user/login',{
-      ...form
-    }).then((res:any)=> {
-      if(res?.code === 0){
-        //登录成功
-        onClose()//关闭弹窗
-      }else {
-        message.error(res?.msg || '位置错误')
-      }
-      
-    })
+    request
+      .post('api/user/login', {
+        ...form,
+        identifier_type: 'phone', //登陆类型，手机登录，第三方登录
+      })
+      .then((res: any) => {
+        if (res?.code === 0) {
+          //登录成功
+          onClose(); //关闭弹窗
+        } else {
+          message.error(res?.msg || '位置错误');
+        }
+      });
   };
   const handleOtherLogin = () => {
     //其他登录方式
   };
-  const handleClose = ()=> {
+  const handleClose = () => {
     //关闭登录框
-    onClose()
-  }
+    onClose();
+  };
   const handlePhoneChange = (e) => {
     const { name, value } = e.target;
     setForm({
       ...form,
-      [name]:value
-    })
+      [name]: value,
+    });
   };
-  const [isShowVerityCode, setIsShowVerityCode] = useState(false)//控制验证码倒计时
-  const handleCountDownEnd = ()=> {
+  const [isShowVerityCode, setIsShowVerityCode] = useState(false); //控制验证码倒计时
+  const handleCountDownEnd = () => {
     //当倒计时结束时的操作
-    setIsShowVerityCode(false)
-    
-  }
+    setIsShowVerityCode(false);
+  };
   return isShow ? (
     <div className={style.loginArea}>
       <div className={style.loginBox}>
         <div className={style.loginTitle}>
           <div className={style.title}>手机登录</div>
-          <div className={style.close} onClick={handleClose}>X</div>
+          <div className={style.close} onClick={handleClose}>
+            X
+          </div>
         </div>
         <input
           type="text"
@@ -92,7 +96,11 @@ const Login: NextPage<IProps> = ({ isShow = false, onClose }) => {
             onChange={handlePhoneChange}
           />
           <span className={style.verityCode} onClick={handleGetverityCode}>
-           {isShowVerityCode?<CountDown time={10} onEnd={handleCountDownEnd}/>:'获取验证码'} 
+            {isShowVerityCode ? (
+              <CountDown time={10} onEnd={handleCountDownEnd} />
+            ) : (
+              '获取验证码'
+            )}
           </span>
         </div>
         <div className={style.loginBtn} onClick={handleLogin}>
@@ -105,8 +113,8 @@ const Login: NextPage<IProps> = ({ isShow = false, onClose }) => {
           注册登录即表示同意&nbsp;&nbsp;
           <a href="" target="_blank">
             用户协议
-          </a>&nbsp;
-          、
+          </a>
+          &nbsp; 、
           <a href="" target="_blank">
             隐私政策
           </a>
